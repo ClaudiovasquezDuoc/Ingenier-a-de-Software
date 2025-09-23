@@ -1,0 +1,173 @@
+-- Consultas de Testing para Base de Datos Hotel Pacific Reef  
+-- Pruebas funcionales
+
+
+-- VERIFICACION DE ESTRUCTURA DE BASE DE DATOS
+
+-- Consulta 1: Verificar que todas las tablas existan
+SELECT table_name, num_rows 
+FROM user_tables 
+WHERE table_name IN ('HOTEL', 'HABITACION', 'CLIENTE', 'RESERVA', 'PAGO', 'EMPLEADO', 'TIPO_EMPLEADO')
+ORDER BY table_name;
+
+-- Consulta 2: Verificar constraints y relaciones
+SELECT constraint_name, constraint_type, table_name, search_condition
+FROM user_constraints 
+WHERE table_name IN ('HOTEL', 'HABITACION', 'CLIENTE', 'RESERVA', 'PAGO', 'EMPLEADO', 'TIPO_EMPLEADO')
+ORDER BY table_name, constraint_type;
+
+-- PRUEBAS DE DATOS INSERTADOS
+
+-- Consulta 3: Verificar datos del hotel
+SELECT ID_HOTEL, NOMBRE_HOTEL, DIRECCION, CATEGORIA 
+FROM HOTEL;
+
+-- Consulta 4: Verificar habitaciones disponibles
+SELECT h.ID_HABITACION, h.TIPO_HAB, h.CAPACIDAD, h.PRECIO, h.DISPONIBILIDAD
+FROM HABITACION h 
+WHERE h.DISPONIBILIDAD = 'S'
+ORDER BY h.CAPACIDAD, h.PRECIO;
+
+-- Consulta 5: Verificar tipos de empleados
+SELECT COD_EMPLEADO, DESCRIPCION 
+FROM TIPO_EMPLEADO
+ORDER BY COD_EMPLEADO;
+
+-- Consulta 6: Verificar empleados registrados
+SELECT e.ID_EMPLEADO, e.NOMBRE_EMP, e.APELLIDO_P_EMP, te.DESCRIPCION as CARGO
+FROM EMPLEADO e
+JOIN TIPO_EMPLEADO te ON e.COD_EMPLEADO = te.COD_EMPLEADO;
+
+-- Consulta 7: Verificar clientes registrados
+SELECT ID_CLIENTE, NOMBRE_CL, APELLIDO_P_CL, CORREO, TELEFONO, DIRECCION
+FROM CLIENTE
+ORDER BY ID_CLIENTE;
+
+-- PRUEBAS DE FUNCIONALIDAD DE BUSQUEDA 
+
+-- Consulta 8: Buscar habitaciones por capacidad (ejemplo: 2 personas)
+SELECT h.ID_HABITACION, h.TIPO_HAB, h.CAPACIDAD, h.PRECIO
+FROM HABITACION h 
+WHERE h.DISPONIBILIDAD = 'S' 
+AND h.CAPACIDAD >= 2
+ORDER BY h.PRECIO;
+
+-- Consulta 9: Buscar habitaciones por rango de precio
+SELECT h.ID_HABITACION, h.TIPO_HAB, h.CAPACIDAD, h.PRECIO
+FROM HABITACION h 
+WHERE h.DISPONIBILIDAD = 'S' 
+AND h.PRECIO BETWEEN 50000 AND 100000
+ORDER BY h.PRECIO;
+
+-- PRUEBAS DE RELACIONES ENTRE TABLAS 
+
+-- Consulta 10: Verificar relacion Reserva-Cliente-Habitacion
+SELECT r.ID_RESERVA, 
+       c.NOMBRE_CL || ' ' || c.APELLIDO_P_CL as CLIENTE,
+       h.TIPO_HAB,
+       r.FECHA_ENTRADA, 
+       r.FECHA_SALIDA,
+       r.CANTIDAD_PERSONAS
+FROM RESERVA r
+JOIN CLIENTE c ON r.ID_CLIENTE = c.ID_CLIENTE
+JOIN HABITACION h ON r.ID_HABITACION = h.ID_HABITACION
+ORDER BY r.FECHA_ENTRADA;
+
+-- Consulta 11: Verificar relacion Reserva-Pago
+SELECT r.ID_RESERVA,
+       c.NOMBRE_CL || ' ' || c.APELLIDO_P_CL as CLIENTE,
+       p.TIPO_PAGO,
+       p.ESTADO_PAGO,
+       p.TOTAL_PAGO,
+       p.FECHA_PAGO
+FROM RESERVA r
+JOIN CLIENTE c ON r.ID_CLIENTE = c.ID_CLIENTE
+LEFT JOIN PAGO p ON r.ID_PAGO = p.ID_PAGO
+ORDER BY r.ID_RESERVA;
+
+-- PRUEBAS DE CALCULOS 
+
+-- Consulta 12: Calcular precio total para diferentes estadias
+SELECT h.TIPO_HAB, 
+       h.PRECIO as PRECIO_NOCHE,
+       (h.PRECIO * 1) as PRECIO_1_NOCHE,
+       (h.PRECIO * 3) as PRECIO_3_NOCHES,
+       (h.PRECIO * 7) as PRECIO_1_SEMANA
+FROM HABITACION h 
+WHERE h.DISPONIBILIDAD = 'S'
+ORDER BY h.PRECIO;
+
+-- Consulta 13: Verificar calculo de noches en reservas existentes
+SELECT r.ID_RESERVA,
+       c.NOMBRE_CL || ' ' || c.APELLIDO_P_CL as CLIENTE,
+       h.TIPO_HAB,
+       r.FECHA_ENTRADA,
+       r.FECHA_SALIDA,
+       (r.FECHA_SALIDA - r.FECHA_ENTRADA) as NOCHES,
+       h.PRECIO,
+       (h.PRECIO * (r.FECHA_SALIDA - r.FECHA_ENTRADA)) as PRECIO_CALCULADO
+FROM RESERVA r
+JOIN CLIENTE c ON r.ID_CLIENTE = c.ID_CLIENTE
+JOIN HABITACION h ON r.ID_HABITACION = h.ID_HABITACION;
+
+-- PRUEBAS DE DISPONIBILIDAD POR FECHAS
+
+-- Consulta 14: Verificar habitaciones ocupadas en fechas especificas
+SELECT h.TIPO_HAB,
+       r.FECHA_ENTRADA,
+       r.FECHA_SALIDA,
+       'OCUPADA' as ESTADO
+FROM HABITACION h
+JOIN RESERVA r ON h.ID_HABITACION = r.ID_HABITACION
+WHERE r.FECHA_ENTRADA <= DATE '2024-01-20'
+AND r.FECHA_SALIDA >= DATE '2024-01-15'
+ORDER BY r.FECHA_ENTRADA;
+
+-- Consulta 15: Habitaciones disponibles para fechas especificas (simulando busqueda)
+SELECT h.ID_HABITACION, h.TIPO_HAB, h.CAPACIDAD, h.PRECIO
+FROM HABITACION h
+WHERE h.DISPONIBILIDAD = 'S'
+AND h.ID_HABITACION NOT IN (
+    SELECT r.ID_HABITACION 
+    FROM RESERVA r
+    WHERE (r.FECHA_ENTRADA <= DATE '2024-03-01' AND r.FECHA_SALIDA >= DATE '2024-02-28')
+    OR (r.FECHA_ENTRADA <= DATE '2024-03-05' AND r.FECHA_SALIDA >= DATE '2024-03-01')
+);
+
+-- PRUEBAS DE INTEGRIDAD DE DATOS
+
+-- Consulta 16: Verificar integridad referencial  (No debe haber reservas sin cliente)
+SELECT COUNT(*) as RESERVAS_SIN_CLIENTE
+FROM RESERVA r
+WHERE r.ID_CLIENTE NOT IN (SELECT ID_CLIENTE FROM CLIENTE);
+
+-- Consulta 17: Verificar integridad referencial  (No debe haber reservas sin habitacion)
+SELECT COUNT(*) as RESERVAS_SIN_HABITACION
+FROM RESERVA r
+WHERE r.ID_HABITACION NOT IN (SELECT ID_HABITACION FROM HABITACION);
+
+-- Consulta 18: Verificar fechas logicas  (Fecha salida debe ser mayor que entrada)
+SELECT COUNT(*) as RESERVAS_FECHAS_INCORRECTAS
+FROM RESERVA
+WHERE FECHA_SALIDA <= FECHA_ENTRADA;
+
+-- ESTADISTICAS PARA REPORTE
+
+-- Consulta 19: Resumen de habitaciones por tipo
+SELECT h.TIPO_HAB, 
+       COUNT(*) as CANTIDAD,
+       AVG(h.PRECIO) as PRECIO_PROMEDIO,
+       MIN(h.PRECIO) as PRECIO_MIN,
+       MAX(h.PRECIO) as PRECIO_MAX
+FROM HABITACION h
+GROUP BY h.TIPO_HAB
+ORDER BY PRECIO_PROMEDIO;
+
+-- Consulta 20: Resumen de reservas por estado de pago
+SELECT p.ESTADO_PAGO, 
+       COUNT(*) as CANTIDAD_RESERVAS,
+       SUM(p.TOTAL_PAGO) as TOTAL_INGRESOS
+FROM RESERVA r
+JOIN PAGO p ON r.ID_PAGO = p.ID_PAGO
+GROUP BY p.ESTADO_PAGO
+ORDER BY CANTIDAD_RESERVAS DESC;
