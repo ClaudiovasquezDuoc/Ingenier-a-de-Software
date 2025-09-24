@@ -1,0 +1,142 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #1E1E1E;
+}
+
+.header {
+    background: #FBE2E2;
+    border: 1px solid black;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #1E1E1E;
+    font-weight: 600;
+}
+
+.hero {
+    text-align: center;
+    margin: 2rem auto;
+    max-width: 1180px;
+}
+
+.hero img {
+    width: 100%;
+    border-radius: 25px;
+    border: 2px solid black;
+}
+
+.acciones {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+    margin: 2rem 0;
+    padding-left: 12rem; 
+}
+
+.btn {
+    padding: 12px 24px;
+    border-radius: 16px;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-neutral {
+    display: inline-flex; 
+    align-items: center;
+    background: #E3E3E3;
+    border: 1px solid #2C2C2C;
+    color: #1E1E1E;
+}
+
+.btn-primary {
+    background: #2C2C2C;
+    display: inline-flex; 
+    align-items: center;
+    border: 1px solid #B2B2B2;
+    color: #F5F5F5;
+}
+
+.footer {
+    text-align: center;
+    padding: 1rem;
+    background: #f5f5f5;
+    margin-top: 2rem;
+}
+
+.btn-card {
+    background: #ffffff;          /* fondo blanco */
+    color: #1E1E1E;              /* texto oscuro */
+    border-radius: 20px;         /* bordes redondeados */
+    border: 1px solid #d9d9d9;   /* borde gris clarito */
+    padding: 12px 20px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.btn-card:hover {
+    background: #f5f5f5;         /* cambia un poco al pasar el mouse */
+}
+
+/* Avatar redondo */
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;          /* círculo */
+    background: #2C2C2C;         /* fondo negro */
+    color: #F5F5F5;              /* texto blanco */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 8px;           /* espacio entre el círculo y el texto */
+}
+
+/* LANGUAGE SWITCHER */
+.switcher-section {
+    display: flex;
+    justify-content: flex-end;   /* 🔹 alineado a la derecha */
+    padding: 1rem 5rem;
+    margin-top: -6.5rem;
+}
+
+.language-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.language-switcher .lang {
+    cursor: pointer;
+    user-select: none;
+}
+
+.language-switcher .toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

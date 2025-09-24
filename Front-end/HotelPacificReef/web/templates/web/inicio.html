@@ -1,0 +1,63 @@
+<!-- base.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific Reef</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <h1 class="logo">HOTEL PACIFIC REEF</h1>
+        <nav class="nav">
+            <ul>
+                <li><a href="#" class="btn btn-card">¿Quiénes Somos?</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <img src="{% static 'web/img/main-bg.png' %}" alt="Hotel Pacific Reef">
+    </section>
+
+    <!-- BOTONES -->
+    <section class="acciones">
+        <a href="#" class="btn btn-neutral">
+            <span class="avatar">I</span>  Ingresar
+        </a>
+        <a href="#" class="btn btn-primary">Registrar</a>
+    
+    </section>
+
+  <!-- LANGUAGE SWITCHER -->
+    <section class="switcher-section">
+        <div class="language-switcher">
+            <span class="lang">ES</span>
+            <span class="toggle">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M32 10H16C8.26801 10 2 16.268 2 24C2 31.732 8.26801 38 16 38H32C39.732 38 46 31.732 46 24C46 16.268 39.732 10 32 10Z" stroke="#303030" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 30C19.3137 30 22 27.3137 22 24C22 20.6863 19.3137 18 16 18C12.6863 18 10 20.6863 10 24C10 27.3137 12.6863 30 16 30Z" stroke="#303030" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="lang">EN</span>
+        </div>
+    </section>
+
+
+
+<!-- FOOTER -->
+    <footer class="footer">
+        <p>&copy; 2025 Hotel Pacific Reef.</p>
+    </footer>
+
+</body>
+</html>

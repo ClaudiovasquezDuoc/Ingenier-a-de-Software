@@ -69,6 +69,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hotel_project.wsgi.application'
 
+# URL prefix for static files
+STATIC_URL = '/static/'
+
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
